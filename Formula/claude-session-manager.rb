@@ -1,8 +1,8 @@
 class ClaudeSessionManager < Formula
   desc "macOS menu bar app to browse and resume your Claude Code sessions"
   homepage "https://github.com/RaazKetan/claude-session-manager"
-  url "https://github.com/RaazKetan/claude-session-manager/archive/refs/tags/v1.2.0.tar.gz"
-  sha256 "d5c843cc8294e5c7413956de00fcce4af6674d422b746bcd2d77dd97719eb717"
+  url "https://github.com/RaazKetan/claude-session-manager/archive/refs/tags/v1.3.0.tar.gz"
+  sha256 "f158e26d12a78a133171dc4d32ac697eab368741761b2a773535693dab8f65dd"
   license "MIT"
   head "https://github.com/RaazKetan/claude-session-manager.git", branch: "main"
 
