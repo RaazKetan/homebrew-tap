@@ -1,0 +1,72 @@
+name: Bump to latest release
+
+# Runs in this repo, so the built-in token is enough to push — no personal
+# access token with access to every other repo needs to exist.
+on:
+  schedule:
+    - cron: "0 */6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  bump:
+    runs-on: macos-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      UPSTREAM: RaazKetan/claude-session-manager
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Read latest release
+        id: rel
+        run: |
+          tag=$(gh api "repos/${UPSTREAM}/releases/latest" -q .tag_name)
+          echo "tag=${tag}" >> "$GITHUB_OUTPUT"
+          echo "version=${tag#v}" >> "$GITHUB_OUTPUT"
+
+      - name: Checksums
+        id: sums
+        run: |
+          tag=${{ steps.rel.outputs.tag }}
+          t=$(curl -fsSL "https://github.com/${UPSTREAM}/archive/refs/tags/${tag}.tar.gz" | shasum -a 256 | cut -d' ' -f1)
+          z=$(curl -fsSL "https://github.com/${UPSTREAM}/releases/download/${tag}/ClaudeSessions.app.zip" | shasum -a 256 | cut -d' ' -f1)
+          echo "tarball=${t}" >> "$GITHUB_OUTPUT"
+          echo "zip=${z}" >> "$GITHUB_OUTPUT"
+
+      - name: Rewrite formula and cask
+        run: |
+          python3 - <<'PY'
+          import os, re
+          tag = "${{ steps.rel.outputs.tag }}"
+          version = "${{ steps.rel.outputs.version }}"
+          upstream = os.environ["UPSTREAM"]
+
+          p = "Formula/claude-session-manager.rb"
+          s = open(p).read()
+          s = re.sub(r'url "https://github\.com/\S+/archive/refs/tags/v[^"]+"',
+                     f'url "https://github.com/{upstream}/archive/refs/tags/{tag}.tar.gz"', s)
+          s = re.sub(r'sha256 "[0-9a-f]{64}"',
+                     'sha256 "${{ steps.sums.outputs.tarball }}"', s, count=1)
+          open(p, "w").write(s)
+
+          p = "Casks/claude-sessions.rb"
+          s = open(p).read()
+          s = re.sub(r'version "[^"]+"', f'version "{version}"', s, count=1)
+          s = re.sub(r'sha256 "[0-9a-f]{64}"',
+                     'sha256 "${{ steps.sums.outputs.zip }}"', s, count=1)
+          open(p, "w").write(s)
+          PY
+
+      - name: Commit if anything changed
+        run: |
+          if git diff --quiet; then
+            echo "Already on ${{ steps.rel.outputs.tag }} — nothing to do."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -aqm "Bump to ${{ steps.rel.outputs.tag }}"
+          git push
+          echo "Bumped to ${{ steps.rel.outputs.tag }}" >> "$GITHUB_STEP_SUMMARY"
