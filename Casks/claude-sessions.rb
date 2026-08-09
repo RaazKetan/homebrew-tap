@@ -11,13 +11,18 @@ cask "claude-sessions" do
 
   app "ClaudeSessions.app"
 
-  caveats <<~EOS
-    This build is ad-hoc signed, not notarized, so macOS quarantines it.
-    After installing, run:
-      xattr -dr com.apple.quarantine /Applications/ClaudeSessions.app
+  # Ad-hoc signed, so macOS quarantines the download and Gatekeeper refuses to
+  # open it. Strip the flag here rather than making every user run xattr.
+  postflight do
+    system_command "/usr/bin/xattr",
+                   args: ["-dr", "com.apple.quarantine", "#{appdir}/ClaudeSessions.app"],
+                   sudo: false
+  end
 
-    Or skip quarantine at install time:
-      HOMEBREW_CASK_OPTS=--no-quarantine brew install --cask RaazKetan/tap/claude-sessions
+  caveats <<~EOS
+    This build is ad-hoc signed rather than notarized. The install strips the
+    quarantine flag for you; if macOS still refuses to open it, run:
+      xattr -dr com.apple.quarantine /Applications/ClaudeSessions.app
   EOS
 
   zap trash: [
