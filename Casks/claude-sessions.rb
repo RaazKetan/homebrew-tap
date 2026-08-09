@@ -7,14 +7,17 @@ cask "claude-sessions" do
   desc "macOS menu bar app to browse and resume your Claude Code sessions"
   homepage "https://github.com/RaazKetan/claude-session-manager"
 
-  depends_on macos: ">= :ventura"
+  depends_on macos: :ventura
 
   app "ClaudeSessions.app"
 
   caveats <<~EOS
-    This build is ad-hoc signed, not notarized. Install with --no-quarantine,
-    or if macOS says the app is damaged:
+    This build is ad-hoc signed, not notarized, so macOS quarantines it.
+    After installing, run:
       xattr -dr com.apple.quarantine /Applications/ClaudeSessions.app
+
+    Or skip quarantine at install time:
+      HOMEBREW_CASK_OPTS=--no-quarantine brew install --cask RaazKetan/tap/claude-sessions
   EOS
 
   zap trash: [
