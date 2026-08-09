@@ -6,8 +6,8 @@ class ClaudeSessionManager < Formula
   license "MIT"
   head "https://github.com/RaazKetan/claude-session-manager.git", branch: "main"
 
-  depends_on :macos
-  depends_on xcode: :build
+  # Ventura is the floor for MenuBarExtra and SMAppService.
+  depends_on macos: :ventura
 
   def install
     system "./build.sh"
