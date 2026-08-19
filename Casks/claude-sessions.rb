@@ -1,6 +1,6 @@
 cask "claude-sessions" do
-  version "1.9.1"
-  sha256 "2e44ca7ba05585c1113d20d82a3b2931abc0bcf4448157bdacd0bcbdfa10f5ce"
+  version "1.10.0"
+  sha256 "10db507d30f8aaf8d8ef65c21f5838034d6c904225b90331482d79443bc1732d"
 
   url "https://github.com/RaazKetan/claude-session-manager/releases/download/v#{version}/ClaudeSessions.app.zip"
   name "Claude Sessions"
