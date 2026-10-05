@@ -1,6 +1,6 @@
 cask "creo" do
-  version "1.11.1"
-  sha256 "95bdb9810dd842fa3fb36bcdd967c00a923b382ad34a3ac6035bd799a69e9e6c"
+  version "1.12.1"
+  sha256 "2817b41faac3f866b9d78370c2fcec45893f1cae1e3dd078fc177492e9a838d0"
 
   url "https://github.com/RaazKetan/creo/releases/download/v#{version}/Creo.app.zip"
   name "Creo"
