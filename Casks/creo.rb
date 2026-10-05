@@ -25,6 +25,9 @@ cask "creo" do
   ]
 
   caveats <<~EOS
+    Start Creo after installation:
+      open /Applications/Creo.app
+
     Creo is ad-hoc signed rather than notarized. The cask clears its quarantine
     flag during installation. If macOS still refuses to open it, run:
       xattr -dr com.apple.quarantine /Applications/Creo.app
