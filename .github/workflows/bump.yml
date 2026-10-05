@@ -15,7 +15,7 @@ jobs:
     runs-on: macos-latest
     env:
       GH_TOKEN: ${{ github.token }}
-      UPSTREAM: RaazKetan/claude-session-manager
+      UPSTREAM: RaazKetan/creo
     steps:
       - uses: actions/checkout@v4
 
@@ -31,7 +31,7 @@ jobs:
         run: |
           tag=${{ steps.rel.outputs.tag }}
           t=$(curl -fsSL "https://github.com/${UPSTREAM}/archive/refs/tags/${tag}.tar.gz" | shasum -a 256 | cut -d' ' -f1)
-          z=$(curl -fsSL "https://github.com/${UPSTREAM}/releases/download/${tag}/ClaudeSessions.app.zip" | shasum -a 256 | cut -d' ' -f1)
+          z=$(curl -fsSL "https://github.com/${UPSTREAM}/releases/download/${tag}/Creo.app.zip" | shasum -a 256 | cut -d' ' -f1)
           echo "tarball=${t}" >> "$GITHUB_OUTPUT"
           echo "zip=${z}" >> "$GITHUB_OUTPUT"
 
@@ -43,7 +43,7 @@ jobs:
           version = "${{ steps.rel.outputs.version }}"
           upstream = os.environ["UPSTREAM"]
 
-          p = "Formula/claude-session-manager.rb"
+          p = "Formula/creo.rb"
           s = open(p).read()
           s = re.sub(r'url "https://github\.com/\S+/archive/refs/tags/v[^"]+"',
                      f'url "https://github.com/{upstream}/archive/refs/tags/{tag}.tar.gz"', s)
@@ -51,7 +51,7 @@ jobs:
                      'sha256 "${{ steps.sums.outputs.tarball }}"', s, count=1)
           open(p, "w").write(s)
 
-          p = "Casks/claude-sessions.rb"
+          p = "Casks/creo.rb"
           s = open(p).read()
           s = re.sub(r'version "[^"]+"', f'version "{version}"', s, count=1)
           s = re.sub(r'sha256 "[0-9a-f]{64}"',
