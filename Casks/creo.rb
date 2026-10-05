@@ -11,8 +11,13 @@ cask "creo" do
 
   app "Creo.app"
 
-  postflight_steps do
-    run "/usr/bin/xattr", args: ["-dr", "com.apple.quarantine", "{{appdir}}/Creo.app"]
+  # Homebrew's declarative install steps are sandboxed away from macOS RunningBoard, so they
+  # cannot launch a GUI app. This compatibility block deliberately runs after the app is moved.
+  postflight do
+    system_command "/usr/bin/xattr",
+                   args: ["-dr", "com.apple.quarantine", "#{appdir}/Creo.app"]
+    system_command "/bin/sh",
+                   args: ["-c", "sleep 1; /usr/bin/open \"$0\"", "#{appdir}/Creo.app"]
   end
 
   uninstall quit: "io.github.raazketan.creo"
@@ -25,9 +30,6 @@ cask "creo" do
   ]
 
   caveats <<~EOS
-    Start Creo after installation:
-      open /Applications/Creo.app
-
     Creo is ad-hoc signed rather than notarized. The cask clears its quarantine
     flag during installation. If macOS still refuses to open it, run:
       xattr -dr com.apple.quarantine /Applications/Creo.app
