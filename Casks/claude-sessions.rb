@@ -13,21 +13,17 @@ cask "claude-sessions" do
 
   # Ad-hoc signed, so macOS quarantines the download and Gatekeeper refuses to
   # open it. Strip the flag here rather than making every user run xattr.
-  postflight do
-    system_command "/usr/bin/xattr",
-                   args: ["-dr", "com.apple.quarantine", "#{appdir}/ClaudeSessions.app"],
-                   sudo: false
+  postflight_steps do
+    run "/usr/bin/xattr", args: ["-dr", "com.apple.quarantine", "{{appdir}}/ClaudeSessions.app"]
 
     # Builds before 1.10.3 do not yet watch their bundle for replacement. Restart a running
     # copy during this upgrade; 1.10.3 and later can hand off to future versions themselves.
-    system_command "/bin/sh",
-                   args: [
-                     "-c",
-                     "if /usr/bin/pgrep -x ClaudeSessions >/dev/null; then " \
-                     '/usr/bin/pkill -x ClaudeSessions; /usr/bin/open "$0"; fi',
-                     "#{appdir}/ClaudeSessions.app",
-                   ],
-                   sudo: false
+    run "/bin/sh", args: [
+      "-c",
+      "if /usr/bin/pgrep -x ClaudeSessions >/dev/null; then " \
+      '/usr/bin/pkill -x ClaudeSessions; /usr/bin/open "$0"; fi',
+      "{{appdir}}/ClaudeSessions.app",
+    ]
   end
 
   zap trash: "~/Library/Application Support/ClaudeSessions"

@@ -2,10 +2,10 @@
 
 ```sh
 # builds from source, no Gatekeeper warning
-brew install RaazKetan/tap/claude-session-manager
+brew install RaazKetan/tap/creo
 
 # or a prebuilt download (no Xcode needed)
-brew install --cask RaazKetan/tap/claude-sessions
+brew install --cask RaazKetan/tap/creo
 ```
 
-- [claude-session-manager](https://github.com/RaazKetan/claude-session-manager) — macOS menu bar app to browse and resume your Claude Code sessions
+- [Creo](https://github.com/RaazKetan/creo) — macOS menu bar app to find and resume Claude Code and Codex sessions
