@@ -4,7 +4,7 @@ name: Bump to latest release
 # access token with access to every other repo needs to exist.
 on:
   schedule:
-    - cron: "0 */6 * * *"
+    - cron: "0 * * * *"
   workflow_dispatch:
 
 permissions:
