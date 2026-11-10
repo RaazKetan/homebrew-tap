@@ -1,8 +1,8 @@
 class Creo < Formula
   desc "Menu bar app to find and resume Claude Code and Codex sessions"
   homepage "https://github.com/RaazKetan/creo"
-  url "https://github.com/RaazKetan/creo/archive/refs/tags/v1.12.6.tar.gz"
-  sha256 "c646a65d7e67dc3d1460095e008ebc17104c5ace95f03f4f9a711ffbc399d643"
+  url "https://github.com/RaazKetan/creo/archive/refs/tags/v1.13.0.tar.gz"
+  sha256 "a6ae2a2c733f06c0a9893df82477f2d7e7a4c6b8805a0e134b3a8af933884ba5"
   license "MIT"
   head "https://github.com/RaazKetan/creo.git", branch: "main"
 
